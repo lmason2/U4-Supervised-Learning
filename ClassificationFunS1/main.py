@@ -94,9 +94,6 @@ def main():
     # e.g. specify a proportion to hold out
     # e.g. 2:1 train:test split (0.33 for testing)
     # in PA4 as train_test_split()
-
-    # 2. random subsampling
-    # do the holdout method "k" times (note: different k than kNN)
     
 
 
