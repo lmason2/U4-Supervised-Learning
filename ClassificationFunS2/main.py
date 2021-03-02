@@ -1,4 +1,5 @@
 import operator
+import math
 import numpy as np 
 import scipy.spatial.distance as distance 
 
@@ -17,6 +18,15 @@ def test_compute_euclidean_distance():
     dist = compute_euclidean_distance(v1, v2)
     sp_dist = distance.euclidean(v1, v2)
     assert np.isclose(dist, sp_dist)
+
+def train_test_split(X, y, test_size):
+    # TODO: shuffle (randomize) X and y in parallel first
+    num_instances = len(X) # 8
+    if isinstance(test_size, float):
+        test_size = math.ceil(num_instances * test_size) # ceil(8 * 0.33)
+    split_index = num_instances - test_size # 8 - 2 = 6
+
+    return X[:split_index], X[split_index:], y[:split_index], y[split_index:]
 
 def main():
     header = ["att1", "att2"]
@@ -89,6 +99,48 @@ def main():
     # e.g. test size 2:1 train:test split
     # hold out a proportion of the data for testing (0.33)
     # implemented as train_test_split() in PA4
+    X_train, X_test, y_train, y_test = train_test_split(train, train_labels, 0.33)
+    print("X_train:", X_train)
+    print("X_test:", X_test)
+    print("y_train:", y_train)
+    print("y_test:", y_test)
+
+    # 2. random subsampling
+    # do the holdout method k times
+    # (note different k than knn)
+    # accuracy is the average accuracy over the k holdout runs
+
+    # 3. k fold cross validation
+    # we are more intentional about our train/test partitions (AKA folds)
+    # create k folds (partitions) of the data
+    # where each instance is in one fold
+    # each run, we hold out one fold for testing (train on the rest)
+    # each instance is in the test set once
+    # for fold in folds:
+    #   test on the fold
+    #   train on the remaining folds (folds - fold)
+    # accuracy is how well the classifier predicts over all the folds 
+
+    # variants
+    # LOOCV (leave one out cross validation)
+    # k = N (num instances)
+    # when you need all the training data you can get 
+    # (small dataset)
+
+    # stratified k fold cross validation
+    # make sure each fold has roughly the same proportion
+    # of class labels as the original dataset
+    # first, group by class label
+    # for each group, distribute the instances one at a time to a fold
+
+    # 4. bootstrap method
+    # random subsampling WITH REPLACEMENT
+    # number of instances is N
+    # create a training set by sampling N instances with replacement
+    # ~63.2% of the instances in the training set
+    # ~36.8% of the instances will not be in the training set
+    # this is the test set
+    # see the notes on github for the math intuition
 
 
 if __name__ == "__main__":
