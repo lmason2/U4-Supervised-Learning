@@ -1,5 +1,6 @@
 import operator
 import math
+import random 
 import numpy as np 
 import scipy.spatial.distance as distance 
 
@@ -27,6 +28,16 @@ def train_test_split(X, y, test_size):
     split_index = num_instances - test_size # 8 - 2 = 6
 
     return X[:split_index], X[split_index:], y[:split_index], y[split_index:]
+
+def randomize_in_place(alist, parallel_list=None):
+    for i in range(len(alist)):
+        # generate a random index to swap the element at i with
+        rand_index = random.randrange(0, len(alist)) # [0, len(alist))
+        alist[i], alist[rand_index] = alist[rand_index], alist[i]
+        if parallel_list is not None: 
+            parallel_list[i], parallel_list[rand_index] = \
+                parallel_list[rand_index], parallel_list[i]
+
 
 def main():
     header = ["att1", "att2"]
@@ -142,6 +153,10 @@ def main():
     # this is the test set
     # see the notes on github for the math intuition
 
+    # warm up task
+    randomize_in_place(train, parallel_list=train_labels)
+    print(train)
+    print(train_labels)
 
 if __name__ == "__main__":
     main()
